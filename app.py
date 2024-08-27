@@ -52,16 +52,15 @@ def pushMsg(msg):
             )
         )
 def setTimer():
-    today = datetime.datetime.now().date()
-    lunch_time = datetime.datetime.combine(today, datetime.time(11, 30, 0))
-    dinner_time = datetime.datetime.combine(today, datetime.time(18, 0, 0))
+    lunch_time = datetime.time(11, 30, 0)
+    dinner_time = datetime.time(18, 0, 0)
     time_elapse = datetime.timedelta(minutes=30)
     while True:
         now = datetime.datetime.now()
-        if now >= dinner_time - time_elapse:
+        if now.time() >= dinner_time - time_elapse:
             alarm_time = datetime.datetime.combine(now.date() + datetime.timedelta(days=1), lunch_time - time_elapse)
             msg = "要吃午餐嗎(11:30)"
-        elif now < lunch_time - time_elapse:
+        elif now.time() < lunch_time - time_elapse:
             alarm_time = datetime.datetime.combine(now.date(), lunch_time - time_elapse)
             msg = "要吃午餐嗎(11:30)"
         else:
