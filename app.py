@@ -51,18 +51,24 @@ def pushMsg(msg):
                 messages=msg
             )
         )
-        
 def setTimer():
+    today = datetime.datetime.now().date()
+    lunch_time = datetime.datetime.combine(today, datetime.time(11, 30, 0))
+    dinner_time = datetime.datetime.combine(today, datetime.time(18, 0, 0))
+    time_elapse = datetime.timedelta(minutes=30)
     while True:
         now = datetime.datetime.now()
-        alarm_time = datetime.datetime.combine(now.date() + datetime.timedelta(days=1), datetime.time(11, 0, 0))
-        print("alarm time: " + str(alarm_time))
+        if now >= dinner_time - time_elapse:
+            alarm_time = datetime.datetime.combine(now.date() + datetime.timedelta(days=1), lunch_time - time_elapse)
+            msg = "要吃午餐嗎(11:30)"
+        elif now < lunch_time - time_elapse:
+            alarm_time = datetime.datetime.combine(now.date(), lunch_time - time_elapse)
+            msg = "要吃午餐嗎(11:30)"
+        else:
+            alarm_time = datetime.datetime.combine(now.date(), dinner_time - time_elapse)
+            msg = "要吃晚餐嗎(18:00)"
         time.sleep((alarm_time - now).total_seconds())
-        pushMsg("要吃午餐嗎？")
-        now = datetime.datetime.now()
-        alarm_time = datetime.datetime.combine(now.date(), datetime.time(17, 30, 0))
-        time.sleep((alarm_time - now).total_seconds())
-        pushMsg("要吃晚餐嗎？")
+        pushMsg(msg)
     
 def initCheck():
     with ApiClient(configuration) as api_client:
