@@ -1,0 +1,14 @@
+FROM python:3.10-alpine
+
+WORKDIR /app
+
+COPY app.py /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENV LINE_CHANNEL_SECRET=<YOUR_CHANNEL_SECRET>
+ENV LINE_CHANNEL_ACCESS_TOKEN=<YOUR_CHANNEL_ACCESS_TOKEN>
+ENV LINE_GROUP_ID=<YOUR_GROUP_ID>
+ENV LINE_PERSONAL_ID=<YOUR_PERSONAL_ID>
+
+CMD ["python", "app.py"]
