@@ -6,8 +6,8 @@ A simple line bot that remind people in a line group, asking them if they're eat
 
 ## How-to
 
-Replace your related information in Dockerfile, and then run the following commands:
+Put all needed environment variables in .env, and then execute the following commands:
 ```
-docker build . --tag 'meal-bot'
+docker build . -t meal-bot
 docker run -d meal-bot
 ```

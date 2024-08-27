@@ -2,6 +2,9 @@ import sys
 import os
 import datetime
 import time
+from dotenv import load_dotenv
+load_dotenv()
+
 from linebot.v3.messaging import (
     Configuration,
     ApiClient,
@@ -11,11 +14,11 @@ from linebot.v3.messaging import (
     TemplateMessage,
     Template,
     MessageAction,
-    ConfirmTemplate,
-    
+    ConfirmTemplate
 )
 from linebot.v3.webhook import WebhookParser
 
+# Environment variables, you should setup in your .env file
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 group_id = os.getenv('LINE_GROUP_ID', None)
@@ -52,19 +55,18 @@ def pushMsg(msg):
             )
         )
 def setTimer():
-    lunch_time = datetime.time(11, 30, 0)
-    dinner_time = datetime.time(18, 0, 0)
-    time_elapse = datetime.timedelta(minutes=30)
+    lunch_notify_time = datetime.time(11, 00, 0)
+    dinner_notify_time = datetime.time(17, 30, 0)
     while True:
         now = datetime.datetime.now()
-        if now.time() >= dinner_time - time_elapse:
-            alarm_time = datetime.datetime.combine(now.date() + datetime.timedelta(days=1), lunch_time - time_elapse)
+        if now >= datetime.datetime.combine(now.date(), dinner_notify_time):
+            alarm_time = datetime.datetime.combine(now.date() + datetime.timedelta(days=1), lunch_notify_time)
             msg = "要吃午餐嗎(11:30)"
-        elif now.time() < lunch_time - time_elapse:
-            alarm_time = datetime.datetime.combine(now.date(), lunch_time - time_elapse)
+        elif now < datetime. datetime.combine(now.date(), lunch_notify_time):
+            alarm_time = datetime.datetime.combine(now.date(), lunch_notify_time)
             msg = "要吃午餐嗎(11:30)"
         else:
-            alarm_time = datetime.datetime.combine(now.date(), dinner_time - time_elapse)
+            alarm_time = datetime.datetime.combine(now.date(), dinner_notify_time)
             msg = "要吃晚餐嗎(18:00)"
         time.sleep((alarm_time - now).total_seconds())
         pushMsg(msg)
